@@ -7,30 +7,23 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
-/**
- * Hibernate demo
- *
- */
-public class App {
+public class MappingApp {
+
 	public static void main(String[] args) {
-		/*
-		 * to store data
-		 */
-//		ClientName cn = new ClientName();
-//		cn.setFname("Ankit");
-//		cn.setLname("Prajapati");
-//
-//		Client c = new Client();
-//		c.setCid(101);
-//		c.setName(cn);
-//		c.setCompany("Oracle");
 
-		/*
-		 * to fetch data
-		 */
-		// Client c = null;
+		Laptop l = new Laptop();
+		l.setLid(101);
+		l.setLname("Dell");
 
-		Configuration con = new Configuration().configure().addAnnotatedClass(Client.class);
+		Student st = new Student();
+		st.setRollno(1);
+		st.setName("Ankit");
+		st.setMarks(45);
+		// st.setLaptop(l);
+		st.getLaptop().add(l);
+
+		Configuration con = new Configuration().configure().addAnnotatedClass(Student.class)
+				.addAnnotatedClass(Laptop.class);
 
 		ServiceRegistry reg = new ServiceRegistryBuilder().applySettings(con.getProperties()).buildServiceRegistry();
 
@@ -38,11 +31,11 @@ public class App {
 		Session s = sf.openSession();
 
 		Transaction tran = s.beginTransaction();
-		// s.save(c); // to save data in db
+		s.save(l); // to save data in db
+		s.save(st);
 
-		// c = (Client) s.get(Client.class, 101); // to fetch data from db
 		tran.commit();
-		// System.out.println(c);
 
 	}
+
 }
